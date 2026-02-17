@@ -1,0 +1,3 @@
+
+// This file is just to update the plan or structure if needed. 
+// The actual file created is clients/page.tsx
