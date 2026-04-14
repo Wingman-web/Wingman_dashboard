@@ -3,7 +3,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,15 +11,12 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertCircle } from 'lucide-react'
 
 const CORRECT_PIN = '7744'
-const DEMO_EMAIL = 'demo@wingman.com'
-const DEMO_PASSWORD = 'wingman_demo_123'
 
 export default function LoginPage() {
     const [pin, setPin] = useState('')
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
     const router = useRouter()
-    const supabase = createClient()
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -33,17 +29,9 @@ export default function LoginPage() {
             return
         }
 
-        const { error } = await supabase.auth.signInWithPassword({
-            email: DEMO_EMAIL,
-            password: DEMO_PASSWORD,
-        })
-        if (error) {
-            setError(error.message)
-        } else {
-            router.refresh()
-            router.push('/')
-        }
-        setLoading(false)
+        document.cookie = `pin_auth=1; path=/; max-age=${60 * 60 * 8}; SameSite=Lax`
+        router.refresh()
+        router.push('/')
     }
 
     return (
